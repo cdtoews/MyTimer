@@ -32,8 +32,8 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     public TextView text;
     public TextView startingTextView;
     public TextView txtFeedback;
-    private long startTime = 10 * 1000;
-    private long warningTime = 5 * 1000;
+    private long startTime = 180 * 1000;
+    private long warningTime = 30 * 1000;
     private final long interval = 1 * 1000;
     private long msLeft;
     private boolean hasWarned;
@@ -79,7 +79,10 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         System.out.println("click");
         //System.out.println("ms left: " + countDownTimer.timeLeft());
         if (!timerHasStarted) {
-            countDownTimer.start(msLeft);
+            if(msLeft == startTime){
+                msLeft += 1000;
+            }
+            countDownTimer.start(msLeft); // add one second so it will be below start in 1k ms
 
 
             timerHasStarted = true;
