@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/timerLayout"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    android:keepScreenOn="true"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/starting_time_prefix"
+        android:id="@+id/startingTextView"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/txtTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="10dip"
+        android:textSize="@dimen/timer_font_size"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/btnStartStop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Start"
+        android:layout_toStartOf="@+id/space"
+        android:layout_toLeftOf="@+id/space" />
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reset"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/space"
+        android:minWidth="100dp"
+        android:onClick="resetTimer"
+        android:layout_toRightOf="@+id/space" />
+
+    <Space
+        android:layout_width="40px"
+        android:layout_height="20px"
+        android:layout_above="@+id/btnReset"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set"
+        android:onClick="openSettings"
+        android:id="@+id/btnSet"
+        android:layout_below="@+id/startingTextView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/txtFeedback"
+        android:layout_marginTop="55dp"
+        android:layout_below="@+id/txtTimer"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
