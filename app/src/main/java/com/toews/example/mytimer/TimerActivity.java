@@ -24,7 +24,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 
 public class TimerActivity extends Activity implements View.OnClickListener {
-
+    //comment
     private RelativeLayout myLayout;
     private myCountdownTimer countDownTimer;
     private boolean timerHasStarted = false;
