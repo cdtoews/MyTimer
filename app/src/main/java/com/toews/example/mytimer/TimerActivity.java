@@ -3,8 +3,10 @@ package com.toews.example.mytimer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -12,6 +14,7 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.app.Activity;
@@ -24,7 +27,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 
 public class TimerActivity extends Activity implements View.OnClickListener {
-    //comment
     private RelativeLayout myLayout;
     private myCountdownTimer countDownTimer;
     private boolean timerHasStarted = false;
@@ -32,14 +34,19 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     public TextView text;
     public TextView startingTextView;
     public TextView txtFeedback;
-    private long startTime = 180 * 1000;
-    private long warningTime = 30 * 1000;
+    public ImageButton btnMute;
+    private long startTime ;
+    private long warningTime ;
     private final long interval = 1 * 1000;
     private long msLeft;
     private boolean hasWarned;
     private boolean overTime;
+    private boolean muted;
 
     protected Vibrator vibrate;
+    MediaPlayer mMediaPlayer;
+    Uri mWarningSound;
+    Uri mTimeupSound;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -51,11 +58,20 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         //stop screen saver
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
+        //let's get our settings
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        startTime = sharedPref.getLong(getString(R.string.timer_length_ms), 180 * 1000);
+        warningTime = sharedPref.getLong(getString(R.string.warning_length_ms), 30 * 1000);
+        muted = sharedPref.getBoolean(getString(R.string.muted_key_name), true);
+
 
         setContentView(R.layout.activity_timer);
         myLayout = (RelativeLayout) this.findViewById(R.id.timerLayout);
         btnStartStop = (Button) this.findViewById(R.id.btnStartStop);
         btnStartStop.setOnClickListener(this);
+        btnMute = (ImageButton) findViewById(R.id.btnMute);
+        setBtnMuteAccurate();
         text = (TextView) findViewById(R.id.txtTimer);
         txtFeedback = (TextView) findViewById(R.id.txtFeedback);
         startingTextView = (TextView) findViewById(R.id.startingTextView);
@@ -63,7 +79,9 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         startingTextView.setText("Starting Time:    Warning Time:\n" + formatMillis(startTime) + "     " + formatMillis(warningTime));
         msLeft = startTime;
         text.setText(formatMillis(startTime));
-
+        mMediaPlayer = new MediaPlayer();
+        mWarningSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.doorchime);
+        mTimeupSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tornado);
         vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         if (vibrate == null) {
@@ -91,8 +109,23 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             //msLeft = countDownTimer.howManyMSleft();
             System.out.println("msleft: " + msLeft);
             countDownTimer.cancel();
+            mMediaPlayer.stop();
             timerHasStarted = false;
             btnStartStop.setText(R.string.resume);
+        }
+    }
+
+    private void playSound(Uri uri) {
+        if (muted) return;
+        try {
+
+
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(this, uri);
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
+        } catch (Exception e) {
+            Toast.makeText(this.getApplicationContext(), "MediaPlayer Exception: \n"+ e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -136,6 +169,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         overTime = false;
         txtFeedback.setText("");
         myLayout.setBackgroundColor(Color.BLACK);
+        mMediaPlayer.stop();
     }
 
     /**
@@ -145,9 +179,14 @@ public class TimerActivity extends Activity implements View.OnClickListener {
      */
     public void openSettings(View view) {
         countDownTimer.cancel();
+        mMediaPlayer.stop();
         timerHasStarted = false;
         btnStartStop.setText(R.string.resume);
         Intent intent = new Intent(this, DisplaySettingsActivity.class);
+        int timerSeconds = (int) (startTime / 1000);
+        int warningSeconds = (int) (warningTime/1000);
+        intent.putExtra("timerSeconds",timerSeconds);
+        intent.putExtra("WarningSeconds", warningSeconds);
         //startActivity(intent);
         startActivityForResult(intent, 2);
     }
@@ -168,14 +207,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                 int newSeconds = data.getIntExtra("timerSeconds", -1);
                 int newWarning = data.getIntExtra("WarningSeconds", -1);
 
-                //we get here if they click set instead of back or cancel
 
-                //toast to show settings
-//                Context context = getApplicationContext();
-//                CharSequence text = "timer: " + newSeconds + "  Warning at: " + newWarning;
-//                int duration = Toast.LENGTH_LONG;
-//                Toast toast = Toast.makeText(context, text, duration);
-//                toast.show();
 
                 //if we have valid values, let's use new timer vlaues
                 if (newSeconds > 0 && newWarning >= 0) {
@@ -183,28 +215,37 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                     warningTime = newWarning * 1000;
                     resetTimer(null);
                     startingTextView.setText("Starting Time:    Warning Time:\n" + formatMillis(startTime) + "     " + formatMillis(warningTime));
+
+                    //let's write these settings
+                    SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putLong(getString(R.string.timer_length_ms),startTime);
+                    editor.putLong(getString(R.string.warning_length_ms),warningTime);
+                    editor.commit();
+
+
                 }
 
             }
         }
     }
 
-    public void flashScreen(long msEachFlash, long numOfFlashes) {
-        for (int i = 0; i < numOfFlashes; i++) {
-            myLayout.setBackgroundColor(Color.WHITE);
-            try {
-                Thread.sleep(msEachFlash);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            myLayout.setBackgroundColor(Color.BLACK);
-            try {
-                Thread.sleep(msEachFlash);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }//end of flashScreen
+//    public void flashScreen(long msEachFlash, long numOfFlashes) {
+//        for (int i = 0; i < numOfFlashes; i++) {
+//            myLayout.setBackgroundColor(Color.WHITE);
+//            try {
+//                Thread.sleep(msEachFlash);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            myLayout.setBackgroundColor(Color.BLACK);
+//            try {
+//                Thread.sleep(msEachFlash);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }//end of flashScreen
 
     @Override
     public void onStart() {
@@ -246,6 +287,26 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         client.disconnect();
     }
 
+    public void btnMuteClicked(View view) {
+        muted = !muted;
+        if(muted){
+            mMediaPlayer.stop();
+        }
+        setBtnMuteAccurate();
+        //let's write these settings
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(getString(R.string.muted_key_name),muted);
+        editor.commit();
+    }
+
+    public void setBtnMuteAccurate(){
+        if(muted){
+            btnMute.setImageResource(R.drawable.muted);
+        }else{
+            btnMute.setImageResource(R.drawable.speaker);
+        }
+    }
 
     //############  CountDownTimerExtended CLASS   ####################
 
@@ -274,6 +335,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             msLeft = millisUntilFinished;
             if (msLeft < warningTime && !hasWarned) {
                 txtFeedback.setText("WARNING!!!");
+                playSound(mWarningSound);
                 vibrate.vibrate(1000);
                 hasWarned = true;
             }
@@ -281,6 +343,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             if (msLeft < 0) {
                 txtFeedback.setText("Time's up!");
                 if (!overTime) {
+                    playSound(mTimeupSound);
                     vibrate.vibrate(2000);
                     overTime = true;
                 }

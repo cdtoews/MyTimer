@@ -2,21 +2,12 @@ package com.toews.example.mytimer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
-
-import com.toews.example.mytimer.R;
-
-import org.w3c.dom.Text;
+import android.widget.Toast;
 
 public class DisplaySettingsActivity extends AppCompatActivity {
 
@@ -62,7 +53,38 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         txtWarningMin = (TextView) this.findViewById(R.id.txtWarningMin);
         txtWarningSec = (TextView) this.findViewById(R.id.txtWarningSec);
 
+        //get incoming settings
+        Bundle data = getIntent().getExtras();
+        int newSeconds = data.getInt("timerSeconds", -1);
+        int newWarningSeconds = data.getInt("WarningSeconds", -1);
+        //Toast.makeText(this.getApplicationContext(), newSeconds + " seconds, warning at " + newWarningSeconds, Toast.LENGTH_LONG).show();
         setCustomVisibility(View.INVISIBLE);
+
+        //let's see which radio button we should select
+        if(newSeconds == 120 && newWarningSeconds == 30){
+            btn2Min.setChecked(true);
+        }else if(newSeconds == 180 && newWarningSeconds == 30){
+            btn3Min.setChecked(true);
+        }else if(newSeconds == 240 && newWarningSeconds == 30){
+            btn4Min.setChecked(true);
+        }else if(newSeconds == 300 && newWarningSeconds == 30){
+            btn5Min.setChecked(true);
+        }else{
+            btnCustom.setChecked(true);
+            //now let's populate the custom fields
+            setCustomVisibility(View.VISIBLE);
+            int newMinutes =  (int) Math.floor(newSeconds / 60);
+            int leftoverSecs = newSeconds % 60;
+            int newWarningMins = (int) Math.floor(newWarningSeconds/60);
+            int warningLeftoverSecs = newWarningSeconds % 60;
+
+            txtTotalMin.setText((String.valueOf( newMinutes)));
+            txtTotalSec.setText(String.valueOf( leftoverSecs));
+            txtWarningMin.setText(String.valueOf( newWarningMins));
+            txtWarningSec.setText(String.valueOf( warningLeftoverSecs));
+        }
+
+
 
 
     }

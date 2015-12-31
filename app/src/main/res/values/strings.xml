@@ -8,4 +8,7 @@
     <string name="resume">Resume</string>
     <string name="title_activity_display_settings">DisplaySettingsActivity</string>
     <string name="btn_set_text">Set</string>
+    <string name="timer_length_ms">timerLenghtMilliseconds</string>
+    <string name="warning_length_ms">warningLengthMilliseconds</string>
+    <string name="muted_key_name">mutedkey</string>
 </resources>
