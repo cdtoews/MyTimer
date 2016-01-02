@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  4:00              :30"
+                android:text="  4:00             1:00"
                 android:id="@+id/btn4Min"
                 android:buttonTint="@color/colorPrimary"
                 android:checked="false"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  5:00              :30"
+                android:text="  5:00             1:00"
                 android:id="@+id/btn5Min"
                 android:buttonTint="@color/colorPrimary"
                 android:checked="false"
@@ -195,12 +195,11 @@
         android:ems="10"
         android:id="@+id/txtWarningSec"
         android:text="30"
-        android:layout_alignTop="@+id/txtTotalSec"
-        android:layout_alignRight="@+id/lblWarning"
-        android:layout_alignEnd="@+id/lblWarning"
-        android:layout_toEndOf="@+id/btnSet"
+        android:layout_above="@+id/spnSounds"
         android:layout_alignLeft="@+id/lblWarningSec"
-        android:layout_alignStart="@+id/lblWarningSec" />
+        android:layout_alignStart="@+id/lblWarningSec"
+        android:layout_alignRight="@+id/lblWarningSec"
+        android:layout_alignEnd="@+id/lblWarningSec" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -214,5 +213,14 @@
         android:layout_alignEnd="@+id/lblWarningMin"
         android:layout_alignLeft="@+id/lblWarningMin"
         android:layout_alignStart="@+id/lblWarningMin" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spnSounds"
+        android:entries="@array/sound_choices"
+        android:layout_below="@+id/txtTotalSec"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp" />
 
 </RelativeLayout>

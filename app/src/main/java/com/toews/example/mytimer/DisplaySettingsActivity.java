@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ public class DisplaySettingsActivity extends AppCompatActivity {
     RadioButton btn4Min;
     RadioButton btn5Min;
     RadioButton btnCustom;
+
+    Spinner spnSounds;
 
     TextView lblTotal;
     TextView lblWarning;
@@ -42,6 +45,8 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         btn5Min = (RadioButton) this.findViewById(R.id.btn5Min);
         btnCustom = (RadioButton) this.findViewById(R.id.btnCustom);
 
+        spnSounds = (Spinner) this.findViewById(R.id.spnSounds);
+
         lblTotal = (TextView) this.findViewById(R.id.lblTotal);
         lblWarning = (TextView) this.findViewById(R.id.lblWarning);
         lblTotalMin = (TextView) this.findViewById(R.id.lblTotalMin);
@@ -57,6 +62,8 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
         int newSeconds = data.getInt("timerSeconds", -1);
         int newWarningSeconds = data.getInt("WarningSeconds", -1);
+        Long soundSetting = data.getLong("soundSetting",0);
+        spnSounds.setSelection(soundSetting.intValue());
         //Toast.makeText(this.getApplicationContext(), newSeconds + " seconds, warning at " + newWarningSeconds, Toast.LENGTH_LONG).show();
         setCustomVisibility(View.INVISIBLE);
 
@@ -65,9 +72,9 @@ public class DisplaySettingsActivity extends AppCompatActivity {
             btn2Min.setChecked(true);
         }else if(newSeconds == 180 && newWarningSeconds == 30){
             btn3Min.setChecked(true);
-        }else if(newSeconds == 240 && newWarningSeconds == 30){
+        }else if(newSeconds == 240 && newWarningSeconds == 60){
             btn4Min.setChecked(true);
-        }else if(newSeconds == 300 && newWarningSeconds == 30){
+        }else if(newSeconds == 300 && newWarningSeconds == 60){
             btn5Min.setChecked(true);
         }else{
             btnCustom.setChecked(true);
@@ -83,6 +90,8 @@ public class DisplaySettingsActivity extends AppCompatActivity {
             txtWarningMin.setText(String.valueOf( newWarningMins));
             txtWarningSec.setText(String.valueOf( warningLeftoverSecs));
         }
+
+        //let's set the sound spinner
 
 
 
@@ -132,10 +141,10 @@ public class DisplaySettingsActivity extends AppCompatActivity {
                     timerWarning = 30;
                     break;
             case 2: timerSeconds = 240;
-                    timerWarning = 30;
+                    timerWarning = 60;
                     break;
             case 3: timerSeconds = 300;
-                    timerWarning = 30;
+                    timerWarning = 60;
                     break;
             case 4: timerSeconds = getTimerSeconds();
                     timerWarning = getWarningSeconds();
@@ -149,6 +158,7 @@ public class DisplaySettingsActivity extends AppCompatActivity {
 
         intent.putExtra("timerSeconds",timerSeconds);
         intent.putExtra("WarningSeconds",timerWarning);
+        intent.putExtra("sounds",spnSounds.getSelectedItemId());
         intent.putExtra("index",idx);
         setResult(2, intent);
         finish();

@@ -41,12 +41,15 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     private long msLeft;
     private boolean hasWarned;
     private boolean overTime;
-    private boolean muted;
+    //private boolean muted;
 
     protected Vibrator vibrate;
     MediaPlayer mMediaPlayer;
     Uri mWarningSound;
     Uri mTimeupSound;
+    boolean vibrateOn;
+    long soundSetting;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -63,7 +66,9 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         startTime = sharedPref.getLong(getString(R.string.timer_length_ms), 180 * 1000);
         warningTime = sharedPref.getLong(getString(R.string.warning_length_ms), 30 * 1000);
-        muted = sharedPref.getBoolean(getString(R.string.muted_key_name), true);
+        soundSetting = sharedPref.getLong("soundSetting", 1);
+        setSoundUris();
+        //muted = sharedPref.getBoolean(getString(R.string.muted_key_name), true);
 
 
         setContentView(R.layout.activity_timer);
@@ -71,18 +76,27 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         btnStartStop = (Button) this.findViewById(R.id.btnStartStop);
         btnStartStop.setOnClickListener(this);
         btnMute = (ImageButton) findViewById(R.id.btnMute);
-        setBtnMuteAccurate();
+        btnMute.setVisibility(View.INVISIBLE);
+//        setBtnMuteAccurate();
         text = (TextView) findViewById(R.id.txtTimer);
         txtFeedback = (TextView) findViewById(R.id.txtFeedback);
         startingTextView = (TextView) findViewById(R.id.startingTextView);
         countDownTimer = new myCountdownTimer(startTime, interval, true);
-        startingTextView.setText("Starting Time:    Warning Time:\n" + formatMillis(startTime) + "     " + formatMillis(warningTime));
+        setStartingTextView();
         msLeft = startTime;
         text.setText(formatMillis(startTime));
         mMediaPlayer = new MediaPlayer();
-        mWarningSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.doorchime);
-        mTimeupSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tornado);
+//        mWarningSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.doorchime);
+//        mTimeupSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tornado);
         vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+                btnMute.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
 
         if (vibrate == null) {
             System.out.println("no vibrate service");
@@ -110,16 +124,41 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             System.out.println("msleft: " + msLeft);
             countDownTimer.cancel();
             mMediaPlayer.stop();
+            btnMute.setVisibility(View.INVISIBLE);
             timerHasStarted = false;
             btnStartStop.setText(R.string.resume);
         }
     }
 
+    private void setSoundUris(){
+        if(soundSetting == 0){
+            //silent no vibrate
+            vibrateOn = false;
+            mTimeupSound = null;
+            mWarningSound = null;
+        }else if(soundSetting == 1){
+            //vibrate only
+            vibrateOn = true;
+            mTimeupSound = null;
+            mWarningSound = null;
+        }else if(soundSetting == 2){
+            //gentle sounds
+            vibrateOn = true;
+            mWarningSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.doorchime);
+            mTimeupSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.chimes1);
+        }else  if (soundSetting == 3){
+            //annoying sounds
+            vibrateOn = true;
+            mWarningSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.doorchime);
+            mTimeupSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tornado);
+        }
+    }
+
     private void playSound(Uri uri) {
-        if (muted) return;
+        if (uri == null) return;
         try {
 
-
+            btnMute.setVisibility(View.VISIBLE);
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(this, uri);
             mMediaPlayer.prepare();
@@ -170,6 +209,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         txtFeedback.setText("");
         myLayout.setBackgroundColor(Color.BLACK);
         mMediaPlayer.stop();
+        btnMute.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -180,6 +220,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
     public void openSettings(View view) {
         countDownTimer.cancel();
         mMediaPlayer.stop();
+        btnMute.setVisibility(View.INVISIBLE);
         timerHasStarted = false;
         btnStartStop.setText(R.string.resume);
         Intent intent = new Intent(this, DisplaySettingsActivity.class);
@@ -187,6 +228,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         int warningSeconds = (int) (warningTime/1000);
         intent.putExtra("timerSeconds",timerSeconds);
         intent.putExtra("WarningSeconds", warningSeconds);
+        intent.putExtra("soundSetting",soundSetting);
         //startActivity(intent);
         startActivityForResult(intent, 2);
     }
@@ -206,6 +248,8 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             if (data.getBooleanExtra("success", false)) {
                 int newSeconds = data.getIntExtra("timerSeconds", -1);
                 int newWarning = data.getIntExtra("WarningSeconds", -1);
+                soundSetting = data.getLongExtra("sounds", 0);
+                setSoundUris();
 
 
 
@@ -214,13 +258,13 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                     startTime = newSeconds * 1000;
                     warningTime = newWarning * 1000;
                     resetTimer(null);
-                    startingTextView.setText("Starting Time:    Warning Time:\n" + formatMillis(startTime) + "     " + formatMillis(warningTime));
-
+                    setStartingTextView();
                     //let's write these settings
                     SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putLong(getString(R.string.timer_length_ms),startTime);
                     editor.putLong(getString(R.string.warning_length_ms),warningTime);
+                    editor.putLong("soundSetting",soundSetting);
                     editor.commit();
 
 
@@ -230,7 +274,21 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         }
     }
 
-//    public void flashScreen(long msEachFlash, long numOfFlashes) {
+    public void setStartingTextView() {
+        String startingTime = "";
+        startingTime += "Starting Time:    Warning Time:\n" + formatMillis(startTime) + "     " + formatMillis(warningTime);
+        startingTime += "\n";
+        try{
+            String[] values = getResources().getStringArray(R.array.sound_choices);
+            startingTime += values[(int)soundSetting];
+        }catch (Exception ex){
+            startingTime += "unknown sounds";
+        }
+        startingTextView.setText(startingTime);
+
+    }
+
+    //    public void flashScreen(long msEachFlash, long numOfFlashes) {
 //        for (int i = 0; i < numOfFlashes; i++) {
 //            myLayout.setBackgroundColor(Color.WHITE);
 //            try {
@@ -286,27 +344,20 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
-
+//
     public void btnMuteClicked(View view) {
-        muted = !muted;
-        if(muted){
-            mMediaPlayer.stop();
-        }
-        setBtnMuteAccurate();
-        //let's write these settings
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(getString(R.string.muted_key_name),muted);
-        editor.commit();
+        mMediaPlayer.stop();
+        btnMute.setVisibility(View.INVISIBLE);
+
     }
 
-    public void setBtnMuteAccurate(){
-        if(muted){
-            btnMute.setImageResource(R.drawable.muted);
-        }else{
-            btnMute.setImageResource(R.drawable.speaker);
-        }
-    }
+//    public void setBtnMuteAccurate(){
+//        if(muted){
+//            btnMute.setImageResource(R.drawable.muted);
+//        }else{
+//            btnMute.setImageResource(R.drawable.speaker);
+//        }
+//    }
 
     //############  CountDownTimerExtended CLASS   ####################
 
@@ -336,7 +387,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             if (msLeft < warningTime && !hasWarned) {
                 txtFeedback.setText("WARNING!!!");
                 playSound(mWarningSound);
-                vibrate.vibrate(1000);
+                if(vibrateOn) vibrate.vibrate(1000);
                 hasWarned = true;
             }
 
@@ -344,7 +395,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                 txtFeedback.setText("Time's up!");
                 if (!overTime) {
                     playSound(mTimeupSound);
-                    vibrate.vibrate(2000);
+                    if(vibrateOn) vibrate.vibrate(2000);
                     overTime = true;
                 }
                 ColorDrawable viewColor = (ColorDrawable) myLayout.getBackground();
