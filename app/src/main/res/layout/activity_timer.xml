@@ -34,22 +34,24 @@
         android:id="@+id/btnStartStop"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="Start"
         android:layout_toStartOf="@+id/space"
-        android:layout_toLeftOf="@+id/space" />
+        android:layout_toLeftOf="@+id/space"
+        android:layout_above="@+id/bottomSpace"/>
 
     <Button
         android:id="@+id/btnReset"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/reset"
-        android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/space"
         android:minWidth="100dp"
         android:onClick="resetTimer"
+        android:layout_above="@+id/bottomSpace"
         android:layout_toRightOf="@+id/space" />
+
+
 
     <Space
         android:layout_width="40px"
@@ -89,4 +91,13 @@
         android:maxHeight="20dp"
         android:layout_toLeftOf="@+id/btnSet"
         android:layout_alignTop="@id/btnSet"/>
+
+    <Space
+        android:layout_width="fill_parent"
+        android:layout_height="120px"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/bottomSpace" />
+
+
 </RelativeLayout>

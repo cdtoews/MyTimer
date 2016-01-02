@@ -280,7 +280,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         startingTime += "\n";
         try{
             String[] values = getResources().getStringArray(R.array.sound_choices);
-            startingTime += values[(int)soundSetting];
+            startingTime += "Sound:" + values[(int)soundSetting];
         }catch (Exception ex){
             startingTime += "unknown sounds";
         }
@@ -382,16 +382,19 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         @Override
         public void onTick(long millisUntilFinished) {
             //System.out.println("tick,");
-            text.setText(formatMillis(millisUntilFinished));
-            msLeft = millisUntilFinished;
-            if (msLeft < warningTime && !hasWarned) {
+            //round msleft down
+            Double Rounded =        (Math.floor(((double) millisUntilFinished) /1000) * 1000);
+            msLeft = Rounded.longValue();
+            text.setText(formatMillis(msLeft));
+            //msLeft = millisUntilFinished;
+            if (msLeft <= warningTime && !hasWarned) {
                 txtFeedback.setText("WARNING!!!");
                 playSound(mWarningSound);
                 if(vibrateOn) vibrate.vibrate(1000);
                 hasWarned = true;
             }
 
-            if (msLeft < 0) {
+            if (msLeft <= 0) {
                 txtFeedback.setText("Time's up!");
                 if (!overTime) {
                     playSound(mTimeupSound);
