@@ -4,33 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class DisplaySettingsActivity extends AppCompatActivity {
 
-    RadioGroup btnGroup;
-    RadioButton btn2Min;
-    RadioButton btn3Min;
-    RadioButton btn4Min;
-    RadioButton btn5Min;
-    RadioButton btnCustom;
-
+    Spinner spnTotalTime;
+    Spinner spnWarning;
     Spinner spnSounds;
 
-    TextView lblTotal;
-    TextView lblWarning;
-    TextView lblTotalMin;
-    TextView lblTotalSec;
-    TextView lblWarningMin;
-    TextView lblWarningSec;
-    TextView txtTotalMin;
-    TextView txtTotalSec;
-    TextView txtWarningMin;
-    TextView txtWarningSec;
+
 
 
     @Override
@@ -38,88 +27,77 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_display_settings);
-        btnGroup = (RadioGroup) this.findViewById(R.id.btnGroup);
-        btn2Min = (RadioButton) this.findViewById(R.id.btn2Min);
-        btn3Min = (RadioButton) this.findViewById(R.id.btn3Min);
-        btn4Min = (RadioButton) this.findViewById(R.id.btn4Min);
-        btn5Min = (RadioButton) this.findViewById(R.id.btn5Min);
-        btnCustom = (RadioButton) this.findViewById(R.id.btnCustom);
+
 
         spnSounds = (Spinner) this.findViewById(R.id.spnSounds);
-
-        lblTotal = (TextView) this.findViewById(R.id.lblTotal);
-        lblWarning = (TextView) this.findViewById(R.id.lblWarning);
-        lblTotalMin = (TextView) this.findViewById(R.id.lblTotalMin);
-        lblTotalSec = (TextView) this.findViewById(R.id.lblTotalSec);
-        lblWarningMin = (TextView) this.findViewById(R.id.lblWarningMin);
-        lblWarningSec = (TextView) this.findViewById(R.id.lblWarningSec);
-        txtTotalMin = (TextView) this.findViewById(R.id.txtTotalMin);
-        txtTotalSec = (TextView) this.findViewById(R.id.txtTotalSec);
-        txtWarningMin = (TextView) this.findViewById(R.id.txtWarningMin);
-        txtWarningSec = (TextView) this.findViewById(R.id.txtWarningSec);
+        spnTotalTime = (Spinner) this.findViewById(R.id.spnTotalTime);
+        spnWarning = (Spinner) this.findViewById(R.id.spnWarning);
 
         //get incoming settings
         Bundle data = getIntent().getExtras();
-        int newSeconds = data.getInt("timerSeconds", -1);
-        int newWarningSeconds = data.getInt("WarningSeconds", -1);
-        Long soundSetting = data.getLong("soundSetting",0);
+        int newSeconds = data.getInt("timerSeconds", 180);
+        int newWarningSeconds = data.getInt("WarningSeconds", 30);
+        Long soundSetting = data.getLong("soundSetting",1);
         spnSounds.setSelection(soundSetting.intValue());
         //Toast.makeText(this.getApplicationContext(), newSeconds + " seconds, warning at " + newWarningSeconds, Toast.LENGTH_LONG).show();
-        setCustomVisibility(View.INVISIBLE);
 
-        //let's see which radio button we should select
-        if(newSeconds == 120 && newWarningSeconds == 30){
-            btn2Min.setChecked(true);
-        }else if(newSeconds == 180 && newWarningSeconds == 30){
-            btn3Min.setChecked(true);
-        }else if(newSeconds == 240 && newWarningSeconds == 60){
-            btn4Min.setChecked(true);
-        }else if(newSeconds == 300 && newWarningSeconds == 60){
-            btn5Min.setChecked(true);
-        }else{
-            btnCustom.setChecked(true);
-            //now let's populate the custom fields
-            setCustomVisibility(View.VISIBLE);
-            int newMinutes =  (int) Math.floor(newSeconds / 60);
-            int leftoverSecs = newSeconds % 60;
-            int newWarningMins = (int) Math.floor(newWarningSeconds/60);
-            int warningLeftoverSecs = newWarningSeconds % 60;
+        //populate time spinners
+        ArrayList<TimeSetting> timelist = createTimeStrings(20);
+        ArrayAdapter<TimeSetting> adapter = new ArrayAdapter<TimeSetting>(
+                this, android.R.layout.simple_spinner_item, timelist);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            txtTotalMin.setText((String.valueOf( newMinutes)));
-            txtTotalSec.setText(String.valueOf( leftoverSecs));
-            txtWarningMin.setText(String.valueOf( newWarningMins));
-            txtWarningSec.setText(String.valueOf( warningLeftoverSecs));
+        spnTotalTime.setAdapter(adapter);
+        spnWarning.setAdapter(adapter);
+
+        //now choose the correct item in spinners
+        int timeSelection = Math.abs(newSeconds -30) / 30;
+        spnTotalTime.setSelection(timeSelection);
+
+        int warningSelection = Math.abs(newWarningSeconds -30) / 30;
+        spnWarning.setSelection(warningSelection);
+
+
+
+
+
+    }
+
+    public static ArrayList<TimeSetting> createTimeStrings(int Minutes){
+
+        ArrayList<TimeSetting> result = new ArrayList<TimeSetting>();
+
+        for(Integer i = 1;i<=Minutes;i++){
+            result.add(new TimeSetting((i*60) -30));
+            result.add(new TimeSetting((i*60) ));
+
         }
 
-        //let's set the sound spinner
+        return  result;
 
+    }//end of CreateTimeStrings
 
+//    public void setCustomVisibility(int isVisible){
+//        lblTotal.setVisibility(isVisible);
+//        lblWarning.setVisibility(isVisible);
+//        lblTotalMin.setVisibility(isVisible);
+//        lblTotalSec.setVisibility(isVisible);
+//        lblWarningMin.setVisibility(isVisible);
+//        lblWarningSec.setVisibility(isVisible);
+//        txtTotalMin.setVisibility(isVisible);
+//        txtTotalSec.setVisibility(isVisible);
+//        txtWarningMin.setVisibility(isVisible);
+//        txtWarningSec.setVisibility(isVisible);
+//    }
 
-
-    }
-
-
-    public void setCustomVisibility(int isVisible){
-        lblTotal.setVisibility(isVisible);
-        lblWarning.setVisibility(isVisible);
-        lblTotalMin.setVisibility(isVisible);
-        lblTotalSec.setVisibility(isVisible);
-        lblWarningMin.setVisibility(isVisible);
-        lblWarningSec.setVisibility(isVisible);
-        txtTotalMin.setVisibility(isVisible);
-        txtTotalSec.setVisibility(isVisible);
-        txtWarningMin.setVisibility(isVisible);
-        txtWarningSec.setVisibility(isVisible);
-    }
-
-    public void buttonChangeEvent(View view) {
-
-        if(btnCustom.isChecked()){
-            setCustomVisibility(View.VISIBLE);
-        }else{
-            setCustomVisibility(View.INVISIBLE);
-        }
-    }
+//    public void buttonChangeEvent(View view) {
+//
+//        if(btnCustom.isChecked()){
+//            setCustomVisibility(View.VISIBLE);
+//        }else{
+//            setCustomVisibility(View.INVISIBLE);
+//        }
+//    }
 
     public void setButtonEvent(View view) {
         String message = "from settings";
@@ -127,51 +105,25 @@ public class DisplaySettingsActivity extends AppCompatActivity {
         intent.putExtra("mystuff","I chose: ");
         intent.putExtra("success",true);
 
-        int timerSeconds;
-        int timerWarning;
-        //determine time
-        int radioButtonID = btnGroup.getCheckedRadioButtonId();
-        View radioButton = btnGroup.findViewById(radioButtonID);
-        int idx = btnGroup.indexOfChild(radioButton);
-        switch (idx){
-            case 0: timerSeconds = 120;
-                    timerWarning = 30;
-                    break;
-            case 1: timerSeconds = 180;
-                    timerWarning = 30;
-                    break;
-            case 2: timerSeconds = 240;
-                    timerWarning = 60;
-                    break;
-            case 3: timerSeconds = 300;
-                    timerWarning = 60;
-                    break;
-            case 4: timerSeconds = getTimerSeconds();
-                    timerWarning = getWarningSeconds();
-                    break;
-            default: timerSeconds = -1;
-                    timerWarning = -1;
-                    break;
+        //determine total time
+        TimeSetting totalSetting =  (TimeSetting) spnTotalTime.getSelectedItem();
+        int timerSeconds = totalSetting.getSeconds();
 
-        }//end of swtich/case
+        //determine warning time
+        TimeSetting warningSetting = (TimeSetting) spnWarning.getSelectedItem();
+        int timerWarning = warningSetting.getSeconds();
 
-
+        //send the data back
         intent.putExtra("timerSeconds",timerSeconds);
         intent.putExtra("WarningSeconds",timerWarning);
         intent.putExtra("sounds",spnSounds.getSelectedItemId());
-        intent.putExtra("index",idx);
+
         setResult(2, intent);
         finish();
 
     }
 
-    public int getTimerSeconds(){
-        return readTextViews(txtTotalMin,txtTotalSec);
-    }
 
-    public int getWarningSeconds(){
-        return readTextViews(txtWarningMin,txtWarningSec);
-    }
 
     private int readTextViews(TextView minuteText, TextView secondText){
         try{

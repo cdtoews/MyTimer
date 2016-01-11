@@ -19,74 +19,6 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
-
-
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_span="5"
-            android:id="@+id/btnGroup"
-            android:layout_below="@+id/textView2"
-            android:layout_centerHorizontal="true">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  2:00              :30"
-                android:id="@+id/btn2Min"
-                android:buttonTint="@color/colorPrimary"
-                android:checked="false"
-                android:onClick="buttonChangeEvent"
-                android:textColor="@color/colorPrimary" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  3:00              :30"
-                android:id="@+id/btn3Min"
-                android:buttonTint="@color/colorPrimary"
-                android:checked="false"
-                android:onClick="buttonChangeEvent"
-                android:textColor="@color/colorPrimary" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  4:00             1:00"
-                android:id="@+id/btn4Min"
-                android:buttonTint="@color/colorPrimary"
-                android:checked="false"
-                android:onClick="buttonChangeEvent"
-                android:textColor="@color/colorPrimary" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  5:00             1:00"
-                android:id="@+id/btn5Min"
-                android:buttonTint="@color/colorPrimary"
-                android:checked="false"
-                android:onClick="buttonChangeEvent"
-                android:textColor="@color/colorPrimary" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="  Custom Time"
-                android:id="@+id/btnCustom"
-                android:buttonTint="@color/colorPrimary"
-                android:checked="false"
-                android:onClick="buttonChangeEvent"
-                android:textColor="@color/colorPrimary" />
-        </RadioGroup>
-
-
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -94,133 +26,71 @@
         android:id="@+id/btnSet"
         android:layout_column="1"
         android:onClick="setButtonEvent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/txtWarningMin"
-        android:layout_alignEnd="@+id/txtWarningMin" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Total Time"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblTotal"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/btnSet"
-        android:layout_toStartOf="@+id/btnSet" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Warning at"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblWarning"
-        android:layout_alignTop="@+id/lblTotal"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Min"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblTotalMin"
-        android:layout_below="@+id/lblTotal"
-        android:layout_alignLeft="@+id/lblTotal"
-        android:layout_alignStart="@+id/lblTotal" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sec"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblTotalSec"
-        android:layout_alignTop="@+id/lblTotalMin"
-        android:layout_toLeftOf="@+id/btnSet"
-        android:layout_toStartOf="@+id/btnSet" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sec"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblWarningSec"
-        android:layout_alignTop="@+id/lblTotalSec"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Min"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblWarningMin"
-        android:layout_alignTop="@+id/lblWarningSec"
-        android:layout_alignLeft="@+id/lblWarning"
-        android:layout_alignStart="@+id/lblWarning" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtTotalMin"
-        android:layout_below="@+id/lblTotalMin"
-        android:layout_toLeftOf="@+id/btnGroup"
-        android:layout_alignLeft="@+id/lblTotalMin"
-        android:layout_alignStart="@+id/lblTotalMin"
-        android:text="5" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtTotalSec"
-        android:text="00"
-        android:layout_alignTop="@+id/txtTotalMin"
-        android:layout_toLeftOf="@+id/btnSet"
-        android:layout_alignLeft="@+id/lblTotalSec"
-        android:layout_alignStart="@+id/lblTotalSec" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtWarningSec"
-        android:text="30"
-        android:layout_above="@+id/spnSounds"
-        android:layout_alignLeft="@+id/lblWarningSec"
-        android:layout_alignStart="@+id/lblWarningSec"
-        android:layout_alignRight="@+id/lblWarningSec"
-        android:layout_alignEnd="@+id/lblWarningSec" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/txtWarningMin"
-        android:text="0"
-        android:layout_below="@+id/lblWarningMin"
-        android:layout_alignRight="@+id/lblWarningMin"
-        android:layout_alignEnd="@+id/lblWarningMin"
-        android:layout_alignLeft="@+id/lblWarningMin"
-        android:layout_alignStart="@+id/lblWarningMin" />
+        android:layout_above="@+id/space2"
+        android:layout_centerHorizontal="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spnSounds"
+        android:textColor="@color/colorPrimary"
         android:entries="@array/sound_choices"
-        android:layout_below="@+id/txtTotalSec"
+        android:layout_below="@+id/space4"
+        android:layout_toRightOf="@+id/space4"
+        android:layout_toEndOf="@+id/space4" />
+
+    <Space
+        android:layout_width="fill_parent"
+        android:layout_height="120px"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp" />
+        android:id="@+id/space2" />
+
+
+
+    <Space
+        android:layout_width="50px"
+        android:layout_height="30px"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space3" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spnTotalTime"
+        android:layout_below="@+id/space3"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/space3"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spnWarning"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignTop="@+id/spnTotalTime"
+        android:layout_toRightOf="@+id/space3"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Sound Setting: "
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/lblSoundSetting"
+        android:layout_alignBottom="@+id/spnSounds"
+        android:layout_alignRight="@+id/space3"
+        android:layout_alignEnd="@+id/space3" />
+
+    <Space
+        android:layout_width="120px"
+        android:layout_height="200px"
+        android:layout_below="@+id/spnTotalTime"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/space4" />
 
 </RelativeLayout>
