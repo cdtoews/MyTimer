@@ -34,22 +34,24 @@
         android:id="@+id/btnStartStop"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomSpace"
         android:layout_alignParentLeft="true"
-        android:text="Start"
         android:layout_toStartOf="@+id/space"
         android:layout_toLeftOf="@+id/space"
-        android:layout_above="@+id/bottomSpace"/>
+        android:height="100dp"
+        android:text="Start" />
 
     <Button
         android:id="@+id/btnReset"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/reset"
+        android:layout_above="@+id/bottomSpace"
         android:layout_toEndOf="@+id/space"
+        android:layout_toRightOf="@+id/space"
+        android:height="100dp"
         android:minWidth="100dp"
         android:onClick="resetTimer"
-        android:layout_above="@+id/bottomSpace"
-        android:layout_toRightOf="@+id/space" />
+        android:text="@string/reset" />
 
 
 
@@ -61,14 +63,16 @@
         android:id="@+id/space" />
 
     <Button
+        android:id="@+id/btnSet"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set"
-        android:onClick="openSettings"
-        android:id="@+id/btnSet"
         android:layout_below="@+id/startingTextView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:width="75dp"
+        android:height="75dp"
+        android:onClick="openSettings"
+        android:text="Set" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +26,8 @@ import android.widget.Toast;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import static java.lang.Thread.sleep;
 
 
 public class TimerActivity extends Activity implements View.OnClickListener {
@@ -111,14 +115,20 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         System.out.println("click");
         //System.out.println("ms left: " + countDownTimer.timeLeft());
         if (!timerHasStarted) {
-            if(msLeft == startTime){
-                msLeft += 1000;
-            }
-            countDownTimer.start(msLeft); // add one second so it will be below start in 1k ms
 
+
+            btnStartStop.setText(R.string.stop);
+            //btnStartStop.setBackgroundColor(Color.RED );
+            try {
+                Thread.sleep(250);
+            } catch (InterruptedException e) {
+               //whatever
+            }
+             countDownTimer.start(msLeft);
+            //btnStartStop.setBackgroundColor(getResources().getColor(R.color.colorPrimary) );
 
             timerHasStarted = true;
-            btnStartStop.setText(R.string.stop);
+
         } else {
             //msLeft = countDownTimer.howManyMSleft();
             System.out.println("msleft: " + msLeft);
