@@ -1,26 +1,20 @@
-package com.toews.example.mytimer;
+package info.yourtechguys.mytimer;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.app.Activity;
-import android.os.CountDownTimer;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -330,7 +324,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.toews.example.mytimer/http/host/path")
+                Uri.parse("android-app://info.yourtechguys.mytimer/http/host/path")
         );
         AppIndex.AppIndexApi.start(client, viewAction);
     }
@@ -349,7 +343,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
                 // Otherwise, set the URL to null.
                 Uri.parse("http://host/path"),
                 // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.toews.example.mytimer/http/host/path")
+                Uri.parse("android-app://info.yourtechguys.mytimer/http/host/path")
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();

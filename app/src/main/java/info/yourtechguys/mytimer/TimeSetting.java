@@ -1,7 +1,7 @@
-package com.toews.example.mytimer;
+package info.yourtechguys.mytimer;
 
 /**
- * Created by ctoews on 1/2/2016.
+ * Created by ct0ews on 1/2/2016.
  */
 public class TimeSetting {
     private int seconds;

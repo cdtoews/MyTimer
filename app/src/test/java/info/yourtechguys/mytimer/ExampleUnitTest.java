@@ -1,4 +1,4 @@
-package com.toews.example.mytimer;
+package info.yourtechguys.mytimer;
 
 import org.junit.Test;
 
