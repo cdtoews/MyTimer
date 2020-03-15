@@ -14,8 +14,8 @@ android {
         applicationId "info.yourtechguys.mytimer"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 8
-        versionName "2.0.3"
+        versionCode 9
+        versionName "2.0.4"
     }
     buildTypes {
         release {

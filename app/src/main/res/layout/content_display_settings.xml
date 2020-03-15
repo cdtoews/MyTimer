@@ -19,6 +19,15 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
 
+    <Space
+        android:layout_width="fill_parent"
+        android:layout_height="100px"
+
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textView2"
+        android:id="@+id/space6" />
+
+
     <Button
         android:id="@+id/btnSet"
         android:layout_width="wrap_content"
@@ -30,16 +39,6 @@
         android:height="75dp"
         android:onClick="setButtonEvent"
         android:text="@string/btn_set_text" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spnSounds"
-        android:textColor="@color/colorPrimary"
-        android:entries="@array/sound_choices"
-        android:layout_below="@+id/space4"
-        android:layout_toRightOf="@+id/space4"
-        android:layout_toEndOf="@+id/space4" />
 
     <Space
         android:layout_width="fill_parent"
@@ -57,42 +56,264 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/space3" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spnTotalTime"
-        android:layout_below="@+id/space3"
-        android:gravity="right"
-        android:layout_toLeftOf="@+id/space3"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
 
     <Spinner
+        android:id="@+id/spnSounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/spnWarning"
-        android:textColor="@color/colorPrimary"
-        android:layout_alignTop="@+id/spnTotalTime"
-        android:layout_toRightOf="@+id/space3"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sound Setting: "
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/lblSoundSetting"
-        android:layout_alignBottom="@+id/spnSounds"
-        android:layout_alignRight="@+id/space3"
-        android:layout_alignEnd="@+id/space3" />
-
+        android:layout_above="@+id/btnSet"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginBottom="42dp"
+        android:layout_toEndOf="@+id/space4"
+        android:layout_toRightOf="@+id/space4"
+        android:entries="@array/sound_choices"
+        android:textColor="@color/colorPrimary" />
     <Space
+        android:id="@+id/space5"
         android:layout_width="120px"
         android:layout_height="200px"
-        android:layout_below="@+id/spnTotalTime"
+        android:layout_below="@id/space6"
         android:layout_centerHorizontal="true"
-        android:id="@+id/space4" />
+ />
+                         <!--Total time number pickers-->
+    <NumberPicker
+        android:id="@+id/npTotalHour"
+        android:layout_width="@dimen/num_pic_width"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_marginStart="@dimen/num_pic_horiz_margin"
+        android:layout_marginTop="@dimen/num_pic_vert_margin"
+        android:layout_marginEnd="@dimen/num_pic_vert_margin"
+        android:layout_marginBottom="@dimen/num_pic_horiz_margin"
+        android:layout_toLeftOf="@id/textViewColon1"
+        android:layout_below="@id/space6"/>
+
+    <TextView
+        android:id="@+id/textViewColon1"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_below="@id/space6"
+        android:layout_toLeftOf="@id/npTotalMinute"
+        android:text=":"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorPrimary" />
+
+
+    <NumberPicker
+        android:id="@+id/npTotalMinute"
+        android:layout_width="@dimen/num_pic_width"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_below="@id/space6"
+        android:layout_marginStart="@dimen/num_pic_horiz_margin"
+        android:layout_marginTop="@dimen/num_pic_vert_margin"
+        android:layout_marginEnd="@dimen/num_pic_vert_margin"
+        android:layout_marginBottom="@dimen/num_pic_horiz_margin"
+        android:layout_toLeftOf="@id/textViewColon2" />
+
+    <TextView
+        android:id="@+id/textViewColon2"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_toLeftOf="@id/npTotalSecond"
+        android:text=":"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/space6"
+        android:textColor="@color/colorPrimary" />
+
+    <NumberPicker
+        android:id="@+id/npTotalSecond"
+        android:layout_width="@dimen/num_pic_width"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_toLeftOf="@id/space5"
+        android:layout_below="@id/space6"
+        android:layout_marginStart="@dimen/num_pic_horiz_margin"
+        android:layout_marginTop="@dimen/num_pic_vert_margin"
+        android:layout_marginEnd="@dimen/num_pic_vert_margin"
+        android:layout_marginBottom="@dimen/num_pic_horiz_margin"/>
+
+
+                <!--Warning time number pickers-->
+    <NumberPicker
+        android:id="@+id/npWarningHour"
+        android:layout_width="@dimen/num_pic_width"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_marginStart="@dimen/num_pic_horiz_margin"
+        android:layout_marginTop="@dimen/num_pic_vert_margin"
+        android:layout_marginEnd="@dimen/num_pic_vert_margin"
+        android:layout_marginBottom="@dimen/num_pic_horiz_margin"
+        android:layout_toRightOf="@id/space5"
+        android:layout_below="@id/space6"/>
+
+    <TextView
+        android:id="@+id/textViewColon3"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_below="@id/space6"
+        android:layout_toRightOf="@id/npWarningHour"
+        android:text=":"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorPrimary" />
+
+
+    <NumberPicker
+        android:id="@+id/npWarningMinute"
+        android:layout_width="@dimen/num_pic_width"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_below="@id/space6"
+        android:layout_marginStart="@dimen/num_pic_horiz_margin"
+        android:layout_marginTop="@dimen/num_pic_vert_margin"
+        android:layout_marginEnd="@dimen/num_pic_vert_margin"
+        android:layout_marginBottom="@dimen/num_pic_horiz_margin"
+        android:layout_toRightOf="@id/textViewColon3" />
+
+    <TextView
+        android:id="@+id/textViewColon4"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_toRightOf="@id/npWarningMinute"
+        android:text=":"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@id/space6"
+        android:textColor="@color/colorPrimary" />
+
+    <NumberPicker
+        android:id="@+id/npWarningSecond"
+        android:layout_width="@dimen/num_pic_width"
+        android:layout_height="@dimen/num_pic_height"
+        android:layout_toRightOf="@id/textViewColon4"
+        android:layout_below="@id/space6"
+        android:layout_marginStart="@dimen/num_pic_horiz_margin"
+        android:layout_marginTop="@dimen/num_pic_vert_margin"
+        android:layout_marginEnd="@dimen/num_pic_vert_margin"
+        android:layout_marginBottom="@dimen/num_pic_horiz_margin"/>
+
+<!--    End of Warning number pickers-->
+
+    <Button
+        android:id="@+id/btn30sec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_below="@id/space8"
+        android:layout_toRightOf="@id/space7"
+        android:width="75dp"
+        android:height="50dp"
+        android:layout_margin="@dimen/btn_margin"
+        android:onClick="setWarningTimeEvent"
+        android:text="30 Sec"
+        android:tag="30"/>
+
+    <Button
+        android:id="@+id/btn60sec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_below="@id/btn30sec"
+        android:layout_toRightOf="@id/space7"
+        android:width="75dp"
+        android:height="50dp"
+        android:layout_margin="@dimen/btn_margin"
+        android:onClick="setWarningTimeEvent"
+        android:text="1 Min"
+        android:tag="60"/>
+
+
+    <Space
+        android:id="@+id/space8"
+        android:layout_width="fill_parent"
+        android:layout_height="50px"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/space5"
+        />
+
+    <Space
+        android:id="@+id/space7"
+        android:layout_width="120px"
+        android:layout_height="800px"
+        android:layout_below="@id/space5"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <Button
+        android:id="@+id/btn1.5Min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_below="@id/space8"
+        android:layout_toLeftOf="@id/space7"
+        android:width="75dp"
+        android:height="50dp"
+        android:layout_margin="@dimen/btn_margin"
+        android:onClick="setTotalTimeEvent"
+        android:text="1.5 Min"
+        android:tag="90"/>
+
+    <Button
+        android:id="@+id/btn2Min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_below="@id/btn1.5Min"
+        android:layout_toLeftOf="@id/space7"
+        android:width="75dp"
+        android:height="50dp"
+        android:layout_margin="@dimen/btn_margin"
+        android:onClick="setTotalTimeEvent"
+        android:text="2 Min"
+        android:tag="120"/>
+
+    <Button
+        android:id="@+id/btn3Min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_below="@id/btn2Min"
+        android:layout_toLeftOf="@id/space7"
+        android:width="75dp"
+        android:height="50dp"
+        android:layout_margin="@dimen/btn_margin"
+        android:onClick="setTotalTimeEvent"
+        android:text="3 Min"
+        android:tag="180"/>
+
+    <Button
+        android:id="@+id/btn4Min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_below="@id/btn3Min"
+        android:layout_toLeftOf="@id/space7"
+        android:width="75dp"
+        android:height="50dp"
+        android:layout_margin="@dimen/btn_margin"
+        android:onClick="setTotalTimeEvent"
+        android:text="4 Min"
+        android:tag="240"/>
+
+    <TextView
+        android:id="@+id/lblSoundSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSet"
+        android:layout_toLeftOf="@+id/space4"
+        android:layout_marginEnd="-2dp"
+        android:layout_marginRight="-2dp"
+        android:layout_marginBottom="42dp"
+        android:text="Sound Setting: "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/colorPrimary" />
+
+    <Space
+        android:id="@+id/space4"
+        android:layout_width="120px"
+        android:layout_height="200px"
+        android:layout_above="@+id/btnSet"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="380dp" />
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -77,12 +78,16 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         btnMute.setVisibility(View.INVISIBLE);
 //        setBtnMuteAccurate();
         text = (TextView) findViewById(R.id.txtTimer);
+
+
+
         txtFeedback = (TextView) findViewById(R.id.txtFeedback);
         startingTextView = (TextView) findViewById(R.id.startingTextView);
         countDownTimer = new myCountdownTimer(startTime, interval, true);
         setStartingTextView();
         msLeft = startTime;
-        text.setText(formatMillis(startTime));
+
+        setTimerText(startTime);
         mMediaPlayer = new MediaPlayer();
 //        mWarningSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.doorchime);
 //        mTimeupSound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.tornado);
@@ -172,8 +177,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         }
     }
 
-
-    public static String formatMillis(long millisUntilFinished) {
+    public static String formatMillis(long millisUntilFinished){
         String timeString = "";
         //let's see if we need a minus sign
         if (millisUntilFinished < 0) {
@@ -190,11 +194,39 @@ public class TimerActivity extends Activity implements View.OnClickListener {
         if (hours == 0) {
             //let's not show hours if there are none
             timeString += String.format("%2d:%02d", minutes, seconds);
+
         } else {
             timeString += String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+        }
+    return timeString;
+    }
+
+    public void  setTimerText(long millisUntilFinished) {
+        String timeString = "";
+        //let's see if we need a minus sign
+        if (millisUntilFinished < 0) {
+            timeString += "-";
+            millisUntilFinished = millisUntilFinished * -1;
         }
 
-        return timeString;
+        int totalSecs = (int) millisUntilFinished / 1000;
+        int hours = totalSecs / 3600;
+        int minutes = (totalSecs % 3600) / 60;
+        int seconds = totalSecs % 60;
+
+
+        if (hours == 0) {
+            //let's not show hours if there are none
+            this.text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.timer_font_size));
+            timeString += String.format("%2d:%02d", minutes, seconds);
+            this.text.setText(timeString);
+        } else {
+            this.text.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.timer_hour_font_size) );
+            timeString += String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            this.text.setText(timeString);
+        }
+
 
     }
 
@@ -206,7 +238,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
 
         }
         btnStartStop.setText(R.string.start);
-        text.setText(formatMillis(startTime));
+        setTimerText(startTime);
         msLeft = startTime;
         hasWarned = false;
         overTime = false;
@@ -389,7 +421,7 @@ public class TimerActivity extends Activity implements View.OnClickListener {
             //round msleft down
             Double Rounded =        (Math.floor(((double) millisUntilFinished) /1000) * 1000);
             msLeft = Rounded.longValue();
-            text.setText(formatMillis(msLeft));
+            setTimerText(msLeft);
             //msLeft = millisUntilFinished;
             if (msLeft <= warningTime && !hasWarned) {
                 txtFeedback.setText("WARNING!!!");
